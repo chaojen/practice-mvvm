@@ -2,10 +2,10 @@ package com.chaojen.mvvmpatternpractice
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.lifecycle.ViewModel
 
-class MainViewModel {
+class MainViewModel(private val dataModel: DataModel) : ViewModel() {
 
-    private val dataModel = DataModel()
     var mData = ObservableField<String>()
     var isLoading = ObservableBoolean()
 
