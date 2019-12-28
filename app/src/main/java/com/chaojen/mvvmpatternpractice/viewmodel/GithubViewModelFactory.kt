@@ -1,15 +1,15 @@
-package com.chaojen.mvvmpatternpractice
+package com.chaojen.mvvmpatternpractice.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import java.lang.IllegalArgumentException
 
-class GithubViewModelFactory(private val dataModel: DataModel) : ViewModelProvider.Factory {
+class GithubViewModelFactory : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            return MainViewModel(dataModel) as T
+        if (modelClass.isAssignableFrom(RepoViewModel::class.java)) {
+            return RepoViewModel() as T
         }
         throw IllegalArgumentException("Unknown ViewModel Class")
     }

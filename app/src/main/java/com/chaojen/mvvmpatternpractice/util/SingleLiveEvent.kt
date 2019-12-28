@@ -1,4 +1,4 @@
-package com.chaojen.mvvmpatternpractice
+package com.chaojen.mvvmpatternpractice.util
 
 import android.util.Log
 import androidx.annotation.MainThread
