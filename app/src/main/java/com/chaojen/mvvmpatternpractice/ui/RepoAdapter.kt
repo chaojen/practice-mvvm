@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.chaojen.mvvmpatternpractice.databinding.ItemRepoBinding
 import com.chaojen.mvvmpatternpractice.model.data.Repo
 
@@ -20,12 +19,7 @@ class RepoAdapter(val items: MutableList<Repo>) : RecyclerView.Adapter<RepoAdapt
 
     override fun onBindViewHolder(holder: RepoViewHolder, position: Int) {
         val repo = items[position]
-        Glide.with(holder.itemView.context)
-            .load(repo.owner.avatarUrl)
-            .into(holder.binding.ownerAvatar)
-        holder.binding.name.text = repo.fullName
-        holder.binding.desc.text = repo.description
-        holder.binding.stars.text = repo.starts.toString()
+        holder.bind(repo)
     }
 
     fun clearItems() {
@@ -46,5 +40,10 @@ class RepoAdapter(val items: MutableList<Repo>) : RecyclerView.Adapter<RepoAdapt
         diffResult.dispatchUpdatesTo(this)
     }
 
-    class RepoViewHolder(val binding: ItemRepoBinding) : RecyclerView.ViewHolder(binding.root)
+    class RepoViewHolder(private val binding: ItemRepoBinding) : RecyclerView.ViewHolder(binding.root) {
+         fun bind(repo: Repo) {
+             binding.repo = repo
+             binding.executePendingBindings() // 立即更新畫面
+         }
+    }
 }
