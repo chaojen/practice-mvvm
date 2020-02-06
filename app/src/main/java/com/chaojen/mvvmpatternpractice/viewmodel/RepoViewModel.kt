@@ -7,24 +7,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.chaojen.mvvmpatternpractice.api.ApiResponse
 import com.chaojen.mvvmpatternpractice.model.DataModel
-import com.chaojen.mvvmpatternpractice.model.data.Repo
+import com.chaojen.mvvmpatternpractice.model.data.RepoSearchResponse
 import com.chaojen.mvvmpatternpractice.util.AbsentLiveData
 
 class RepoViewModel(private val dataModel: DataModel) : ViewModel() {
 
     val isLoading = ObservableBoolean()
-    val repos: LiveData<MutableList<Repo>>
+    val repos: LiveData<ApiResponse<RepoSearchResponse>>
     private val query = MutableLiveData<String>()
 
     init {
-        repos = Transformations.switchMap(query, object : Function<String, LiveData<MutableList<Repo>>> {
-            override fun apply(input: String?): LiveData<MutableList<Repo>> {
-                return if (TextUtils.isEmpty(input)) {
-                    AbsentLiveData.create()
-                } else {
-                    dataModel.searchRepo(input ?: "")
-                }
+        repos = Transformations.switchMap(query, object : Function<String, LiveData<ApiResponse<RepoSearchResponse>>> {
+            override fun apply(input: String?): LiveData<ApiResponse<RepoSearchResponse>>? {
+                return if (TextUtils.isEmpty(input)) AbsentLiveData.create() else dataModel.searchRepo(input ?: "")
             }
         })
     }

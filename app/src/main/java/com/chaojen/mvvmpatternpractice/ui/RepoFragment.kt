@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.chaojen.mvvmpatternpractice.api.ApiResponse
 import com.chaojen.mvvmpatternpractice.databinding.FragmentRepoBinding
 import com.chaojen.mvvmpatternpractice.model.data.Repo
+import com.chaojen.mvvmpatternpractice.model.data.RepoSearchResponse
 import com.chaojen.mvvmpatternpractice.viewmodel.GithubViewModelFactory
 import com.chaojen.mvvmpatternpractice.viewmodel.RepoViewModel
 
@@ -37,7 +39,17 @@ class RepoFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(RepoViewModel::class.java)
         binding.viewModel = viewModel
-        viewModel.repos.observe(this, Observer<MutableList<Repo>> { t -> repoAdapter.swapItems(t)})
+        viewModel.repos.observe(this, object : Observer<ApiResponse<RepoSearchResponse>> {
+            override fun onChanged(response: ApiResponse<RepoSearchResponse>?) {
+                response?.run {
+                    if (isSuccessful()) {
+                        body?.items?.run {
+                            repoAdapter.swapItems(this)
+                        }
+                    }
+                }
+            }
+        })
     }
 
     private fun doSearch() {
